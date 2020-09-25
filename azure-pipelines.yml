@@ -11,32 +11,33 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  myproject: 'BlazorMovies/Server/BlazorMovies.Server.csproj'
+  projectpath: 'BlazorMovies/Server/BlazorMovies.Server.csproj'
 
 steps:
-- task: UseDotNet@2
+- task: DotNetCoreCLI@2
+  displayName: Build
   inputs:
-    packageType: 'sdk'
-    version: '3.1.x'
-    includePreviewVersions: true
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-- task: CmdLine@2
-  displayName: 'Installing EF Core CLI tools'
+    command: build
+    projects: '$(projectpath)'
+    arguments: '--configuration $(buildConfiguration)' # Update this to match your need
+- task: DotNetCoreCLI@2
+  displayName: 'Initialize EntityFrameworkCore'
   inputs:
-    script: 'dotnet tool install --global dotnet-ef'
+    command: custom
+    custom: tool
+    arguments: 'install --global dotnet-ef'
 - task: CmdLine@2
   displayName: 'Generating DB script'
   inputs:
-    script: 'dotnet ef migrations script -i -o $(Build.ArtifactStagingDirectory)\migrate.sql --project $(myproject)'
+    script: 'dotnet ef migrations script -i -o $(Build.ArtifactStagingDirectory)\migrate.sql --project $(projectpath)'
 - task: DotNetCoreCLI@2
-  displayName: 'Publishingi App...'
+  displayName: 'Publishing App...'
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: $(myproject)
+    projects: '$(projectpath)'
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) --self-contained --runtime win-x86'
     zipAfterPublish: false
     modifyOutputPath: false
 - task: PublishBuildArtifacts@1
-  displayName: "Publishing Build Artifacts..."
+  displayName: 'Publishing Build Artifacts...'
