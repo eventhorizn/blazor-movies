@@ -34,11 +34,11 @@ namespace BlazorMovies.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IFileStorageService, AzureStorageService>();
+                options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddScoped<IFileStorageService, AzureStorageService>();
             // Uncomment if you want to store images locally instead of on azure
-            //services.AddScoped<IFileStorageService, InAppStorageService>();
-            //services.AddHttpContextAccessor();
+            services.AddScoped<IFileStorageService, InAppStorageService>();
+            services.AddHttpContextAccessor();
             services.AddControllersWithViews();
             services.AddRazorPages();
 
