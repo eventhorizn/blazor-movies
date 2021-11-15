@@ -1,28 +1,9 @@
-﻿@*can have multiple routes*@
-@page "/"
-@page "/index"
-@inject IMoviesRepository repository
+﻿@page "/"
 
-<div>
-    <h3>In Theaters: Azure Devops</h3>
+<PageTitle>Index</PageTitle>
 
-    <MoviesList Movies="InTheaters" />
-</div>
+<h1>Hello, world!</h1>
 
-<div>
-    <h3>Upcoming Releases</h3>
+Welcome to your new app.
 
-    <MoviesList Movies="UpcomingReleases" />
-</div>
-
-@code{
-    private List<Movie> InTheaters;
-    private List<Movie> UpcomingReleases;
-
-    protected async override Task OnInitializedAsync()
-    {
-        var response = await repository.GetIndexPageDTO();
-        InTheaters = response.InTheaters;
-        UpcomingReleases = response.UpcomingReleases;
-    }
-}
+<SurveyPrompt Title="How is Blazor working for you?" />

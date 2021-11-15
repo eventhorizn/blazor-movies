@@ -1,40 +1,17 @@
 ﻿@inherits LayoutComponentBase
-@inject TokenRenewer tokenRenewer
-@inject NavigationManager navigationManager
-@inject IJSRuntime js
 
-<div class="sidebar">
-    <NavMenu />
-</div>
-
-<div class="main">
-    <div class="top-row px-4">
-        <LoginLinks/>
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
     </div>
 
-    <div class="content px-4" style="margin-bottom: 20px;">
-        @Body
-    </div>
+    <main>
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
 </div>
-
-@code {
-    [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await js.InitializeInactivityTimer(DotNetObjectReference.Create(this));
-        tokenRenewer.Initiate();
-    }
-
-    [JSInvokable]
-    public async Task Logout()
-    {
-        var authState = await AuthenticationState;
-        if (authState.User.Identity.IsAuthenticated)
-        {
-            // Uncomment to activate automatic logout
-            navigationManager.NavigateTo("logout");
-        }
-    }
-}
