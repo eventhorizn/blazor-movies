@@ -1,5 +1,4 @@
 ﻿using BlazorMovies.Shared.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,28 +9,20 @@ namespace BlazorMovies.Server.Controllers;
 public class RatingController : ControllerBase
 {
     private readonly ApplicationDbContext context;
-    private readonly UserManager<IdentityUser> userManager;
 
-    public RatingController(ApplicationDbContext context,
-        UserManager<IdentityUser> userManager)
+    public RatingController(ApplicationDbContext context)
     {
         this.context = context;
-        this.userManager = userManager;
     }
 
     [HttpPost]
     public async Task<ActionResult> Rate(MovieRating movieRating)
     {
-        var user = await userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
-        var userId = user.Id;
-
         var currentRating = await context.MovieRatings
-            .FirstOrDefaultAsync(x => x.MovieId == movieRating.MovieId &&
-            x.UserId == userId);
+            .FirstOrDefaultAsync(x => x.MovieId == movieRating.MovieId);
 
         if (currentRating == null)
         {
-            movieRating.UserId = userId;
             movieRating.RatingDate = DateTime.Today;
             context.Add(movieRating);
             await context.SaveChangesAsync();

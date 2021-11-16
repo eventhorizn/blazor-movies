@@ -3,7 +3,6 @@ using BlazorMovies.Server.Helpers;
 using BlazorMovies.Shared.DTO;
 using BlazorMovies.Shared.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,16 +16,13 @@ public class MoviesController : ControllerBase
     private readonly IFileStorageService fileStorageService;
     private readonly IMapper mapper;
     private string containerName = "movies";
-    private readonly UserManager<IdentityUser> userManager;
 
     public MoviesController(ApplicationDbContext context,
-        IFileStorageService fileStorageService,
-        IMapper mapper, UserManager<IdentityUser> userManager)
+        IFileStorageService fileStorageService, IMapper mapper)
     {
         this.context = context;
         this.fileStorageService = fileStorageService;
         this.mapper = mapper;
-        this.userManager = userManager;
     }
 
     [HttpGet]
@@ -149,18 +145,12 @@ public class MoviesController : ControllerBase
             voteAverage = await context.MovieRatings.Where(x => x.MovieId == id)
                 .AverageAsync(x => x.Rate);
 
-            if (HttpContext.User.Identity.IsAuthenticated)
+            var vote = await context.MovieRatings
+                    .FirstOrDefaultAsync(x => x.MovieId == id);
+
+            if (vote != null)
             {
-                var user = await userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
-                var userId = user.Id;
-
-                var userVoteDB = await context.MovieRatings
-                    .FirstOrDefaultAsync(x => x.MovieId == id && x.UserId == userId);
-
-                if (userVoteDB != null)
-                {
-                    userVote = userVoteDB.Rate;
-                }
+                userVote = vote.Rate;
             }
         }
 
