@@ -17,8 +17,6 @@ builder.Services.AddScoped<IHttpService, HttpService>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IMoviesRepository, MoviesRepository>();
-builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
-builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IDisplayMessage, DisplayMessage>();
 

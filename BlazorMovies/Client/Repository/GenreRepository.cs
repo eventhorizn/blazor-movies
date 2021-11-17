@@ -1,65 +1,61 @@
 ﻿using BlazorMovies.Client.Helpers;
 using BlazorMovies.Shared.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace BlazorMovies.Client.Repository
+namespace BlazorMovies.Client.Repository;
+
+public class GenreRepository : IGenreRepository
 {
-    public class GenreRepository : IGenreRepository
+    private readonly IHttpService httpService;
+    private string url = "api/genres";
+
+    public GenreRepository(IHttpService httpService)
     {
-        private readonly IHttpService httpService;
-        private string url = "api/genres";
+        this.httpService = httpService;
+    }
 
-        public GenreRepository(IHttpService httpService)
+    public async Task<List<Genre>> GetGenres()
+    {
+        var response = await httpService.Get<List<Genre>>(url);
+        if (!response.Success)
         {
-            this.httpService = httpService;
+            throw new ApplicationException(await response.GetBody());
         }
 
-        public async Task<List<Genre>> GetGenres()
-        {
-            var response = await httpService.Get<List<Genre>>(url);
-            if (!response.Success)
-            {
-                throw new ApplicationException(await response.GetBody());
-            }
+        return response.Response;
+    }
 
-            return response.Response;
+    public async Task<Genre> GetGenre(int id)
+    {
+        var response = await httpService.Get<Genre>($"{url}/{id}");
+        if (!response.Success)
+        {
+            throw new ApplicationException(await response.GetBody());
         }
 
-        public async Task<Genre> GetGenre(int id)
-        {
-            var response = await httpService.Get<Genre>($"{url}/{id}");
-            if (!response.Success)
-            {
-                throw new ApplicationException(await response.GetBody());
-            }
+        return response.Response;
+    }
 
-            return response.Response;
-        }
+    public async Task CreateGenre(Genre genre)
+    {
+        var response = await httpService.Post(url, genre);
 
-        public async Task CreateGenre(Genre genre)
-        {
-            var response = await httpService.Post(url, genre);
+        if (!response.Success)
+            throw new ApplicationException(await response.GetBody());
+    }
 
-            if (!response.Success)
-                throw new ApplicationException(await response.GetBody());
-        }
+    public async Task UpdateGenre(Genre genre)
+    {
+        var response = await httpService.Put(url, genre);
 
-        public async Task UpdateGenre(Genre genre)
-        {
-            var response = await httpService.Put(url, genre);
+        if (!response.Success)
+            throw new ApplicationException(await response.GetBody());
+    }
 
-            if (!response.Success)
-                throw new ApplicationException(await response.GetBody());
-        }
+    public async Task DeleteGenre(int Id)
+    {
+        var response = await httpService.Delete($"{url}/{Id}");
 
-        public async Task DeleteGenre(int Id)
-        {
-            var response = await httpService.Delete($"{url}/{Id}");
-
-            if (!response.Success)
-                throw new ApplicationException(await response.GetBody());
-        }
+        if (!response.Success)
+            throw new ApplicationException(await response.GetBody());
     }
 }
