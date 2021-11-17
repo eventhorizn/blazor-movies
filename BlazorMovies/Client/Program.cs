@@ -3,8 +3,10 @@ using BlazorMovies.Client.Helpers;
 using BlazorMovies.Client.Repository;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Tewr.Blazor.FileReader;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
@@ -19,5 +21,7 @@ builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IDisplayMessage, DisplayMessage>();
+
+builder.Services.AddFileReaderService(options => options.InitializeOnFirstCall = true);
 
 await builder.Build().RunAsync();

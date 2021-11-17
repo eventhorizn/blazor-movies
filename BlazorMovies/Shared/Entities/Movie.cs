@@ -7,14 +7,14 @@ public class Movie
 {
     public int Id { get; set; }
     [Required]
-    public string Title { get; set; }
-    public string Summary { get; set; }
+    public string? Title { get; set; }
+    public string? Summary { get; set; }
     public bool InTheaters { get; set; }
-    public string Trailer { get; set; }
+    public string? Trailer { get; set; }
     [Required]
     public DateTime? ReleaseDate { get; set; }
-    public string Poster { get; set; }
-    public string TitleBrief
+    public string? Poster { get; set; }
+    public string? TitleBrief
     {
         get
         {
@@ -30,7 +30,7 @@ public class Movie
     public List<MoviesGenres> MoviesGenres { get; set; } = new List<MoviesGenres>();
     public List<MovieActors> MovieActors { get; set; } = new List<MovieActors>();
     [NotMapped]
-    public string MovieURL => $"movie/{Id}/{Title.Replace(" ", "-")}";
+    public string MovieURL => $"movie/{Id}/{Title?.Replace(" ", "-")}";
     [NotMapped]
     public double Rating { get; set; }
 }

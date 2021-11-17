@@ -1,6 +1,7 @@
 using BlazorMovies.Server;
 using BlazorMovies.Server.Helpers;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IFileStorageService, InAppStorageService>();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().
+    AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddRazorPages();
 
 builder.Services.AddAutoMapper(typeof(Program));
