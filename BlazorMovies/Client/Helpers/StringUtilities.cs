@@ -1,7 +1,6 @@
-﻿namespace BlazorMovies.Client.Helpers
+﻿namespace BlazorMovies.Client.Helpers;
+
+public class StringUtilities
 {
-    public class StringUtilities
-    {
-        public static string CustomToUpper(string value) => value.ToUpper();
-    }
+    public static string CustomToUpper(string value) => value.ToUpper();
 }

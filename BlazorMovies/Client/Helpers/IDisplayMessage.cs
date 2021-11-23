@@ -1,10 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿namespace BlazorMovies.Client.Helpers;
 
-namespace BlazorMovies.Client.Helpers
+public interface IDisplayMessage
 {
-    public interface IDisplayMessage
-    {
-        ValueTask DisplayErrorMessage(string message);
-        ValueTask DisplaySuccessMessage(string message);
-    }
+    ValueTask DisplayErrorMessage(string message);
+    ValueTask DisplaySuccessMessage(string message);
 }

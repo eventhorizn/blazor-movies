@@ -13,7 +13,7 @@
                    @bind-value="filterMoviesDTO.Title" @bind-value:event="oninput"
                    @onkeypress="@((KeyboardEventArgs e) => TitleKeyPress(e))" />
         </div>
-        <div class="form-group mx-sm-2 mb-2">
+        <div class="form-group mb-2">
             <select class="form-control" @bind="filterMoviesDTO.GenreId">
                 <option value="0">
                     --Select a Genre--
@@ -57,7 +57,7 @@
             SelectedPage="SelectedPage"/>
 
 @code {
-    private List<Movie> Movies;
+    private List<Movie>? Movies;
     private FilterMoviesDTO filterMoviesDTO = new FilterMoviesDTO();
     private int totalAmountPages;
     private List<Genre> Genres = new List<Genre>();

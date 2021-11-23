@@ -1,24 +1,20 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
+﻿namespace BlazorMovies.Client.Helpers;
 
-namespace BlazorMovies.Client.Helpers
+public class HttpResponseWrapper<T>
 {
-    public class HttpResponseWrapper<T>
+    public HttpResponseWrapper(T response, bool success, HttpResponseMessage httpResponseMessage)
     {
-        public HttpResponseWrapper(T response, bool success, HttpResponseMessage httpResponseMessage)
-        {
-            Success = success;
-            Response = response;
-            HttpResponseMessage = httpResponseMessage;
-        }
+        Success = success;
+        Response = response;
+        HttpResponseMessage = httpResponseMessage;
+    }
 
-        public bool Success { get; set; }
-        public T Response { get; set; }
-        public HttpResponseMessage HttpResponseMessage { get; set; }
+    public bool Success { get; set; }
+    public T Response { get; set; }
+    public HttpResponseMessage HttpResponseMessage { get; set; }
 
-        public async Task<string> GetBody()
-        {
-            return await HttpResponseMessage.Content.ReadAsStringAsync();
-        }
+    public async Task<string> GetBody()
+    {
+        return await HttpResponseMessage.Content.ReadAsStringAsync();
     }
 }

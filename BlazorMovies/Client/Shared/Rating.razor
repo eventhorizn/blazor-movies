@@ -14,21 +14,11 @@
     [Parameter] public int MaximumRating { get; set; }
     [Parameter] public int SelectedRating { get; set; }
     [Parameter] public EventCallback<int> OnVote { get; set; }
-    [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
 
     private bool voted = false;
 
     private async Task onclickHandle(int starNumber)
     {
-        var authState = await AuthenticationState;
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
-        {
-            await displayMessage.DisplayErrorMessage("You must login to vote");
-            return;
-        }
-
         SelectedRating = starNumber;
         voted = true;
         await OnVote.InvokeAsync(SelectedRating);
